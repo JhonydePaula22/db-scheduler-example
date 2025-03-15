@@ -1,0 +1,16 @@
+services:
+  database:
+    image: postgres:17-alpine
+    container_name: database
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: sa
+      POSTGRES_PASSWORD: pass
+    ports:
+      - "5432:5432"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: postgres -c 'max_connections=1000'
+    restart: always
+    volumes:
+      - ./src/main/resources/database/init-schema.sql:/docker-entrypoint-initdb.d/init.sql
