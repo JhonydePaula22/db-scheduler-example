@@ -260,6 +260,16 @@ public class TaskSchedulerService {
 }
 ```
 
+### Testing the service:
+
+As a test, I created a simple controller to schedule, cancel, and update tasks.
+So I created an integration test that spins up 2 instances, then schedules two tasks that run every 5 seconds.
+Then I stop instance 1 and create an instance 3. And finally, stop instance 2 and create an instance 4.
+The test ensures that the tasks are not executed by more than one instance at a time and ensures that the tasks are run
+every 5 seconds.
+You can check the
+test [here](src/test/java/we/arewaes/dynamicallytaskscheduler/MultiInstanceDynamicallyTaskSchedulerITTest.java)
+
 ---
 
 ## Conclusion
