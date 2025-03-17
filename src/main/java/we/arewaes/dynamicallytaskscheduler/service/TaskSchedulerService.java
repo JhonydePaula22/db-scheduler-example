@@ -20,7 +20,7 @@ public class TaskSchedulerService {
     private final Scheduler scheduler;
 
     public void scheduleTaskExecution(String taskId, String trigger) {
-        log.info("Schedule task with taskId: {}", taskId);
+        log.info("Schedule task with taskId: {} \n", taskId);
         this.scheduler.scheduleIfNotExists(DYNAMIC_RECURRING_TASK
                 .instance(taskId)
                 .data(new SchedulerConfiguration.ScheduleAndNoData(new CronSchedule(trigger), false))
@@ -28,7 +28,7 @@ public class TaskSchedulerService {
     }
 
     public void cancelTaskExecution(String taskId) {
-        log.info("Cancel task with taskId: {}", taskId);
+        log.info("Cancel task with taskId: {} \n", taskId);
         try {
             this.scheduler.cancel(new TaskInstance<>(DYNAMIC_RECURRING_TASK_NAME, taskId));
         } catch (TaskInstanceNotFoundException e) {
@@ -41,7 +41,7 @@ public class TaskSchedulerService {
     }
 
     public void updateTaskExecution(String taskId, String trigger, boolean onHold) {
-        log.info("Update task with taskId: {}", taskId);
+        log.info("Update task with taskId: {} \n", taskId);
         this.cancelTaskExecution(taskId);
         this.scheduler.scheduleIfNotExists(DYNAMIC_RECURRING_TASK
                 .instance(taskId)

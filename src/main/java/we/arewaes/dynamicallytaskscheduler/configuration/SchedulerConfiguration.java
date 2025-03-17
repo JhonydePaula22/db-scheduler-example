@@ -14,6 +14,7 @@ import com.github.kagkarlsson.scheduler.task.schedule.CronSchedule;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import we.arewaes.dynamicallytaskscheduler.repository.ScheduledTaskRepository;
@@ -29,6 +30,11 @@ public class SchedulerConfiguration {
     public static final String DYNAMIC_RECURRING_TASK_NAME = "dynamic-recurring-task";
     public static final TaskDescriptor<ScheduleAndNoData> DYNAMIC_RECURRING_TASK =
             TaskDescriptor.of(DYNAMIC_RECURRING_TASK_NAME, ScheduleAndNoData.class);
+
+    @Bean
+    public String instanceId(@Value("${instance.id}") String instanceId) {
+        return instanceId;
+    }
 
     @Bean
     public Scheduler scheduler(DataSource dataSource, TaskExecutorService taskExecutorService, ScheduledTaskRepository scheduledTaskRepository) {
@@ -67,7 +73,7 @@ public class SchedulerConfiguration {
                 }
 
                 if (!isOnHold(taskInstanceWithSchedule) && isOnHoldDb(taskInstanceWithSchedule)) {
-                    return handleOnHoldNotInSyncWithDb("Task is on hold on the DB. Will be replaced", true, taskInstanceWithSchedule);
+                    return handleOnHoldNotInSyncWithDb("Task is on hold on the DB. Will be replaced \n", true, taskInstanceWithSchedule);
                 }
             }
             log.info("Proceeding with the task execution");
@@ -84,11 +90,11 @@ public class SchedulerConfiguration {
             if (isOnHoldDb(taskInstanceWithSchedule)) {
                 return rescheduleTaskExecutor(taskInstanceWithSchedule);
             }
-            return handleOnHoldNotInSyncWithDb("Task was on hold. Will be replaced", false, taskInstanceWithSchedule);
+            return handleOnHoldNotInSyncWithDb("Task was on hold. Will be replaced \n", false, taskInstanceWithSchedule);
         }
 
         private CompletionHandler.OnCompleteReschedule<Object> rescheduleTaskExecutor(TaskInstance<ScheduleAndNoData> taskInstanceWithSchedule) {
-            log.info("Task is on hold. Will be rescheduled");
+            log.info("Task is on hold. Will be rescheduled \n");
             return new CompletionHandler.OnCompleteReschedule<>(taskInstanceWithSchedule.getData().getSchedule());
         }
 

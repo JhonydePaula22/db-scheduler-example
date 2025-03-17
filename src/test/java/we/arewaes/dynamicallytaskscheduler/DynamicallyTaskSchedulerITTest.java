@@ -12,6 +12,8 @@ import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -46,10 +48,14 @@ public class DynamicallyTaskSchedulerITTest implements BeforeAllCallback, AfterA
     @Override
     public void beforeAll(ExtensionContext context) {
         postgreSQLContainer.start();
+    }
 
-        System.setProperty("DB_URL", ((PostgreSQLContainer<?>) postgreSQLContainer).getJdbcUrl());
-        System.setProperty("spring.datasource.username", "sa");
-        System.setProperty("spring.datasource.password", "pass");
+    @DynamicPropertySource
+    static void registerPgProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url",
+                () -> ((PostgreSQLContainer<?>) postgreSQLContainer).getJdbcUrl());
+        registry.add("spring.datasource.username", () -> "sa");
+        registry.add("spring.datasource.password", () -> "pass");
     }
 
     @Override

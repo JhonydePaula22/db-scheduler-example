@@ -14,3 +14,35 @@ services:
     restart: always
     volumes:
       - ./src/main/resources/database/init-schema.sql:/docker-entrypoint-initdb.d/init.sql
+
+  dynamically_task_executor-1:
+    build:
+      dockerfile: ./Dockerfile
+    container_name: dynamically_task_executor-1
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/db
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD: pass
+      INSTANCE_ID: dynamically_task_executor-1
+      PORT: 8081
+    ports:
+      - "8081:8081"
+    depends_on:
+      - database
+    restart: always
+
+  dynamically_task_executor-2:
+    build:
+      dockerfile: ./Dockerfile
+    container_name: dynamically_task_executor-2
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/db
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD: pass
+      INSTANCE_ID: dynamically_task_executor-2
+      PORT: 8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    restart: always
