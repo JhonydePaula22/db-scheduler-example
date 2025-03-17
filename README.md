@@ -268,7 +268,7 @@ Then I stop instance 1 and create an instance 3. And finally, stop instance 2 an
 The test ensures that the tasks are not executed by more than one instance at a time and ensures that the tasks are run
 every 5 seconds.
 You can check the
-test [here](src/test/java/we/arewaes/dynamicallytaskscheduler/MultiInstanceDynamicallyTaskSchedulerITTest.java)
+test [here](https://github.com/JhonydePaula22/db-scheduler-example/blob/main/src/test/java/we/arewaes/dynamicallytaskscheduler/MultiInstanceDynamicallyTaskSchedulerITTest.java)
 
 ---
 
