@@ -3,6 +3,8 @@ LABEL authors="jonathandepaula"
 
 ENV INSTANCE_ID=${INSTANCE_ID}
 
-COPY target/dynamicallytaskscheduler-0.0.1-SNAPSHOT.jar /dynamicallytaskscheduler.jar
+COPY . /app
+WORKDIR /app
+RUN ./mvnw clean package -DskipTests
 
-ENTRYPOINT ["java", "-jar", "/dynamicallytaskscheduler.jar"]
+ENTRYPOINT ["java", "-jar", "target/dynamicallytaskscheduler-0.0.1-SNAPSHOT.jar"]
