@@ -3,7 +3,7 @@
 ## Context
 
 In my team, I faced a challenge: how to dynamically schedule recurring tasks in a cloud-based, multi-instance
-environment.
+environment, so we can benefit from the cloud's scalability and reliability.
 
 Previously, we used an on-premises infrastructure where recurring tasks were scheduled using Spring's `TaskScheduler`.
 This interface allows scheduling tasks with fixed-rate, fixed-delay, or cron-like expressions. You can read more about
@@ -153,7 +153,9 @@ public static class ScheduleAndNoData implements ScheduleAndData, Serializable {
 #### Execution Interceptor
 
 The `TaskExecutionCustomInterceptor` intercepts task execution to handle tasks that are on hold.
-Here I also used the different types of `CompletitionHandler` that the lib offers. In summary you can:
+The `ExecutionInterceptor` is an interface that when implemented, allows you to intercept task execution and modify the
+task's state, data, schedule or even cancel it.
+Here I used different types of `CompletitionHandler` that the lib offers. In summary you can:
 Use `OnCompleteReschedule` for recurring tasks that are on hold, so they are not executed at this time.
 Use `OnCompleteReplace` when you need to update the task's state or schedule.
 
